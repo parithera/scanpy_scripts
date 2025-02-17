@@ -23,5 +23,6 @@ if __name__=='__main__':
         legend_loc="on data",
         frameon=False,
         ncols=3,
+        save="graph.png"
     )
 
