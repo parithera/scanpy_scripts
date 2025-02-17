@@ -13,13 +13,9 @@ if __name__=='__main__':
     sc.settings.set_figure_params(dpi=50, facecolor="white")
     adata = ad.read_h5ad(output_path.replace("python", "out.h5ad"))
     
-    # Plot clusters
-    sc.pl.umap(
-        adata,
-        color=["leiden", "log1p_total_counts", "pct_counts_mt", "log1p_n_genes_by_counts"],
-        wspace=0.5,
-        ncols=2,
-        legend_loc="on data",
-        save='graph.png'
+    # Obtain cluster-specific differentially expressed genes
+    sc.tl.rank_genes_groups(adata, groupby="leiden_res_0.50", method="wilcoxon")
+    sc.pl.rank_genes_groups_dotplot(
+        adata, groupby="leiden_res_0.50", standard_scale="var", n_genes=5, save="graph.png"
     )
 

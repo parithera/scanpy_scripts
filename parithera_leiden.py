@@ -16,9 +16,7 @@ if __name__=='__main__':
     # Plot clusters
     sc.pl.umap(
         adata,
-        color=["leiden", "log1p_total_counts", "pct_counts_mt", "log1p_n_genes_by_counts"],
-        wspace=0.5,
-        ncols=2,
+        color=["leiden_res_0.02", "leiden_res_0.50", "leiden_res_2.00"],
         legend_loc="on data",
         save='graph.png'
     )
