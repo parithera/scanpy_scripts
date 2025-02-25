@@ -21,3 +21,37 @@ if __name__=='__main__':
         save='graph.png'
     )
 
+    # Extract UMAP coordinates
+    umap_data = adata.obsm['X_umap']
+
+    # Create a list of dictionaries for each cell, containing its UMAP coordinates and any other metadata you want to include
+    cells = []
+
+    if 'leiden' in adata.obs:  # Example of including cluster labels (assuming leiden clustering was done)
+        clusters = adata.obs['leiden'].astype(str).tolist()
+    else:
+        clusters = ['None'] * len(umap_data)
+
+    samples = adata.obs['sample'].astype(str).tolist()
+
+    for i, (x, y) in enumerate(umap_data):
+        cell_info = {
+            'id': i,
+            'x': float(x),
+            'y': float(y),
+            'cluster': clusters[i],  # Add any other metadata you need here
+            'sample': samples[i]     # Extract the sample from which the data is taken
+        }
+        cells.append(cell_info)
+
+    output = {
+        "cells": cells,
+        "type": "leiden"
+    }
+
+    # Save the UMAP data as a JSON file
+    json_output_path = os.path.join(output_path, "leiden_data.json")
+    with open(json_output_path, 'w') as f:
+        json.dump(output, f, indent=4)
+
+
