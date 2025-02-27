@@ -4,6 +4,7 @@ import anndata as ad
 import sys
 import os
 import json
+import hdf5plugin
 
 if __name__=='__main__':
     output_path = sys.argv[1]
