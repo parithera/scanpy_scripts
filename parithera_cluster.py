@@ -2,7 +2,6 @@
 import scanpy as sc
 import anndata as ad
 import sys
-import hdf5plugin
 import os
 import json
 
@@ -11,7 +10,7 @@ if __name__=='__main__':
     sc.settings.figdir = output_path
 
     sc.settings.set_figure_params(dpi=50, facecolor="white")
-    adata = ad.read_h5ad(output_path.replace("python", "out.h5ad"))
+    adata = ad.io.read_h5ad(output_path.replace("python", "out.h5ad"))
     
     # Plot clusters
     sc.pl.umap(
@@ -55,5 +54,4 @@ if __name__=='__main__':
     json_output_path = os.path.join(output_path, "cluster_data.json")
     with open(json_output_path, 'w') as f:
         json.dump(output, f, indent=4)
-
 

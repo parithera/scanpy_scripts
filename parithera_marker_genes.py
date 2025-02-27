@@ -2,7 +2,6 @@
 import scanpy as sc
 import anndata as ad
 import sys
-import hdf5plugin
 import os
 import json
 
@@ -11,7 +10,7 @@ if __name__=='__main__':
     sc.settings.figdir = output_path
 
     sc.settings.set_figure_params(dpi=50, facecolor="white")
-    adata = ad.read_h5ad(output_path.replace("python", "out.h5ad"))
+    adata = ad.io.read_h5ad(output_path.replace("python", "out.h5ad"))
     
     # Obtain cluster-specific differentially expressed genes
     sc.tl.rank_genes_groups(adata, groupby="leiden_res_0.50", method="wilcoxon")
@@ -25,4 +24,22 @@ if __name__=='__main__':
         ncols=3,
         save="graph.png"
     )
+
+    # Export the data to generate this plot to a JSON file
+    export_data = {
+        "cluster_genes": dc_cluster_genes.tolist(),
+        "adata_metadata": {
+            "obs_names": adata.obs_names.tolist(),
+            "var_names": adata.var_names.tolist(),
+            "uns_keys": list(adata.uns.keys()),
+            "obsm_keys": list(adata.obsm.keys())
+        }
+    }
+
+    # Create the output directory if it does not exist
+    os.makedirs(output_path, exist_ok=True)
+
+    json_file_path = os.path.join(output_path, "exported_data.json")
+    with open(json_file_path, 'w') as f:
+        json.dump(export_data, f, indent=4)
 
