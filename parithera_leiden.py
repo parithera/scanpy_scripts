@@ -7,8 +7,9 @@ import json
 import hdf5plugin
 
 class Leiden:
-    def __init__(self, ouput_path):
+    def __init__(self, ouput_path, leiden_res):
         self.output_path = ouput_path
+        self.leiden_res = leiden_res
 
     def run(self):
         sc.settings.figdir = self.output_path
@@ -19,7 +20,7 @@ class Leiden:
         # Plot clusters
         sc.pl.umap(
             adata,
-            color=["leiden_res_0.02", "leiden_res_0.50", "leiden_res_2.00"],
+            color=["leiden_res_"+self.leiden_res],
             legend_loc="on data",
             save='graph.png', show=False
         )
@@ -61,5 +62,13 @@ class Leiden:
 
 if __name__=='__main__':
     output_path = sys.argv[1]
-    leiden = Leiden(output_path)
+    # Get the directory of the current script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Open and parse the arguments.json file
+    arguments_file_path = os.path.join(script_dir, "arguments.json")
+    with open(arguments_file_path, 'r') as f:
+        arguments = json.load(f)
+    leiden_res =  arguments["leiden_res"]
+    leiden = Leiden(output_path, leiden_res)
     leiden.run()
