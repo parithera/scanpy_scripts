@@ -40,14 +40,19 @@ class Markers:
             }
         }
 
+        output = {
+            "data": export_data,
+            "type": "cluster"
+        }
+
         # Create the output directory if it does not exist
         os.makedirs(self.output_path, exist_ok=True)
 
-        json_file_path = os.path.join(self.output_path, "exported_data.json")
+        json_file_path = os.path.join(self.output_path, "marker_genes_data.json")
         with open(json_file_path, 'w') as f:
-            json.dump(export_data, f, indent=4)
+            json.dump(output, f)
 
-        return export_data
+        return output
 
 if __name__=='__main__':
     output_path = sys.argv[1]

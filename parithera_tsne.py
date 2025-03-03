@@ -43,14 +43,14 @@ class TSNE:
             cells.append(cell_info)
 
         output = {
-            "cells": cells,
+            "data": cells,
             "type": "tsne"
         }
 
         # Save the UMAP data as a JSON file
         json_output_path = os.path.join(self.output_path, "tsne_data.json")
         with open(json_output_path, 'w') as f:
-            json.dump(output, f, indent=4)
+            json.dump(output, f)
 
         return output
 
